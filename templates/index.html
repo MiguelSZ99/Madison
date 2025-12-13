@@ -140,6 +140,49 @@
       font-size: 1.05rem;
       opacity: 0.95;
     }
+
+    /* Emoji picker */
+    .emoji-row {
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+    .emoji-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #fff;
+      border-radius: 999px;
+      padding: 7px 12px;
+      cursor: pointer;
+      font-weight: 800;
+      opacity: 0.95;
+    }
+    .emoji-panel {
+      display: none;
+      position: absolute;
+      left: 0;
+      top: -190px;
+      background: rgba(0,0,0,0.88);
+      border-radius: 14px;
+      padding: 10px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.12);
+      max-width: 340px;
+      z-index: 10;
+    }
+    .emoji-panel span {
+      font-size: 1.35rem;
+      cursor: pointer;
+      margin: 6px;
+      display: inline-block;
+      transition: transform 0.1s ease;
+      user-select: none;
+    }
+    .emoji-panel span:hover { transform: scale(1.18); }
   </style>
 </head>
 
@@ -176,7 +219,36 @@
       <div class="section-title">2. Chat</div>
 
       <form method="post">
-        <textarea name="pregunta" placeholder="Escribe aquí tu mensaje..."></textarea>
+        <textarea id="msgInput" name="pregunta" placeholder="Escribe aquí tu mensaje..."></textarea>
+
+        <div class="emoji-row">
+          <button class="emoji-btn" type="button" onclick="toggleEmojis()">😊 Emojis</button>
+
+          <div id="emojiPanel" class="emoji-panel">
+            <!-- Caritas -->
+            <span onclick="addEmoji('😀')">😀</span>
+            <span onclick="addEmoji('😄')">😄</span>
+            <span onclick="addEmoji('😉')">😉</span>
+            <span onclick="addEmoji('😏')">😏</span>
+            <span onclick="addEmoji('😍')">😍</span>
+            <span onclick="addEmoji('😂')">😂</span>
+            <span onclick="addEmoji('🤔')">🤔</span>
+            <span onclick="addEmoji('😎')">😎</span>
+            <span onclick="addEmoji('🥰')">🥰</span>
+            <span onclick="addEmoji('😅')">😅</span>
+            <span onclick="addEmoji('🙃')">🙃</span>
+
+            <!-- Corazones y extras -->
+            <span onclick="addEmoji('❤️')">❤️</span>
+            <span onclick="addEmoji('🖤')">🖤</span>
+            <span onclick="addEmoji('💘')">💘</span>
+            <span onclick="addEmoji('✨')">✨</span>
+            <span onclick="addEmoji('🔥')">🔥</span>
+          </div>
+
+          <div style="opacity:0.75; font-size:0.82rem;">Tú decides el emoji</div>
+        </div>
+
         <div style="margin-top: 10px; text-align: right;">
           <button type="submit">Enviar</button>
         </div>
@@ -195,12 +267,38 @@
   </div>
 
 <script>
+function toggleEmojis() {
+  const panel = document.getElementById("emojiPanel");
+  panel.style.display = (panel.style.display === "block") ? "none" : "block";
+}
+
+function addEmoji(emoji) {
+  const textarea = document.getElementById("msgInput");
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+
+  const text = textarea.value;
+  textarea.value = text.substring(0, start) + emoji + text.substring(end);
+
+  textarea.focus();
+  textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
+}
+
+// cerrar panel si clic fuera
+document.addEventListener("click", (e) => {
+  const panel = document.getElementById("emojiPanel");
+  const btn = document.querySelector(".emoji-btn");
+  if (!panel || !btn) return;
+  if (!panel.contains(e.target) && !btn.contains(e.target)) {
+    panel.style.display = "none";
+  }
+});
+
 function emojiFor(who){
   if(who === "ella") return "🙂";
   if(who === "miguel") return "😎";
   return "💬";
 }
-
 function labelFor(who){
   if(who === "ella") return "Tú";
   if(who === "miguel") return "Él";
@@ -254,7 +352,6 @@ function updateChat() {
     })
     .catch(() => {});
 }
-
 setInterval(updateChat, 2000);
 updateChat();
 </script>
