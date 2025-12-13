@@ -1,0 +1,32 @@
+
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Madison</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<h1>Hola Madison</h1>
+<form method="post">
+<button name="emocion" value="ternura">Ternura</button>
+<button name="emocion" value="risa">Risa</button>
+<button name="emocion" value="picante">Picante</button>
+<button name="emocion" value="sorpresa">Sorpresa</button>
+</form>
+{% if frase_generada %}<p>{{ frase_generada }}</p>{% endif %}
+<form method="post">
+<textarea name="pregunta"></textarea>
+<button>Enviar</button>
+</form>
+<div id="chat"></div>
+<script>
+setInterval(()=>{
+fetch("{{ estado_url }}").then(r=>r.json()).then(d=>{
+document.getElementById("chat").innerHTML =
+d.historial.map(m=>`<p><b>${m.de}:</b> ${m.texto}</p>`).join("");
+})
+},2000)
+</script>
+</body>
+</html>

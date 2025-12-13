@@ -1,0 +1,21 @@
+
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>Panel Miguel</title></head>
+<body>
+<h2>Panel de Miguel</h2>
+<div id="chat"></div>
+<form method="post" action="{{ post_url }}">
+<textarea name="respuesta"></textarea>
+<button>Enviar</button>
+</form>
+<script>
+setInterval(()=>{
+fetch("{{ estado_url }}").then(r=>r.json()).then(d=>{
+document.getElementById("chat").innerHTML =
+d.historial.map(m=>`<p><b>${m.de}:</b> ${m.texto}</p>`).join("");
+})
+},2000)
+</script>
+</body>
+</html>
