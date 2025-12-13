@@ -145,26 +145,26 @@
 
 <body>
   <div class="card">
-    <h1>Hola <span>Madison</span> 💜</h1>
-    <p class="sub">Elige un mood y escribe lo que quieras ✨</p>
+    <h1>Hola <span>Madison</span></h1>
+    <p class="sub">Elige un mood y escribe lo que quieras</p>
 
     <!-- Emociones -->
     <div>
       <div class="section-title">1. Elige una emoción</div>
       <form method="post">
         <div class="buttons">
-          <button type="submit" name="emocion" value="ternura">Ternura 🫶</button>
-          <button type="submit" name="emocion" value="risa">Risa 😂</button>
+          <button type="submit" name="emocion" value="ternura">Ternura 😌</button>
+          <button type="submit" name="emocion" value="risa">Risa 😄</button>
           <button type="submit" name="emocion" value="picante">Picante 😏</button>
-          <button type="submit" name="emocion" value="sorpresa">Sorpresa 🎁</button>
+          <button type="submit" name="emocion" value="sorpresa">Sorpresa ✨</button>
         </div>
       </form>
 
       {% if frase_generada %}
         <div class="output">
-          <div class="tag">Mensaje generado ✨</div>
+          <div class="tag">Mensaje generado</div>
           <div class="msgline">
-            <div class="bubble-emoji">💌</div>
+            <div class="bubble-emoji">💬</div>
             <div>{{ frase_generada }}</div>
           </div>
         </div>
@@ -176,34 +176,34 @@
       <div class="section-title">2. Chat</div>
 
       <form method="post">
-        <textarea name="pregunta" placeholder="Escribe aquí tu mensaje... 😊"></textarea>
+        <textarea name="pregunta" placeholder="Escribe aquí tu mensaje..."></textarea>
         <div style="margin-top: 10px; text-align: right;">
-          <button type="submit">Enviar 💌</button>
+          <button type="submit">Enviar</button>
         </div>
       </form>
 
       <div id="chatBox" style="margin-top:12px;"></div>
 
       <div class="small-text">
-        *Se muestran los últimos mensajes entre tú 💜 y él 😎
+        *Se muestran los últimos mensajes entre tú y él 😎
       </div>
     </div>
 
     <div class="footer">
-      Hecho en Python & Flask 🐍✨
+      Hecho en Python & Flask
     </div>
   </div>
 
 <script>
 function emojiFor(who){
-  if(who === "ella") return "💜";
+  if(who === "ella") return "🙂";
   if(who === "miguel") return "😎";
   return "💬";
 }
 
 function labelFor(who){
-  if(who === "ella") return "Tú 💜";
-  if(who === "miguel") return "Él 😎";
+  if(who === "ella") return "Tú";
+  if(who === "miguel") return "Él";
   return "Mensaje";
 }
 
@@ -218,7 +218,7 @@ function updateChat() {
       if (hist.length === 0) {
         const info = document.createElement("div");
         info.className = "small-text";
-        info.textContent = "Aún no hay mensajes… escribe el primero 😊";
+        info.textContent = "Aún no hay mensajes…";
         chatBox.appendChild(info);
         return;
       }
