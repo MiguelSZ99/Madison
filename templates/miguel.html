@@ -142,6 +142,42 @@
       border-radius: 999px;
       white-space: nowrap;
     }
+
+    /* Emojis siempre visibles */
+    .emoji-row {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .emoji-panel {
+      width: 100%;
+      background: rgba(0,0,0,0.35);
+      border-radius: 14px;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,0.10);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .emoji-panel span {
+      font-size: 1.35rem;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 8px;
+      transition: transform 0.1s ease, background 0.1s ease;
+      user-select: none;
+    }
+
+    .emoji-panel span:hover {
+      transform: scale(1.18);
+      background: rgba(255,255,255,0.08);
+    }
   </style>
 </head>
 
@@ -160,27 +196,66 @@
 
     <div class="section-title">Responder</div>
     <form method="post" action="{{ post_url }}">
-      <textarea name="respuesta" placeholder="Escribe tu respuesta aquí... 💬"></textarea>
+      <textarea id="respInput" name="respuesta" placeholder="Escribe tu respuesta aquí..."></textarea>
+
+      <!-- EMOJIS SIEMPRE VISIBLES -->
+      <div class="emoji-row">
+        <div class="emoji-panel">
+          <span onclick="addEmoji('😀')">😀</span>
+          <span onclick="addEmoji('😄')">😄</span>
+          <span onclick="addEmoji('😉')">😉</span>
+          <span onclick="addEmoji('😏')">😏</span>
+          <span onclick="addEmoji('😂')">😂</span>
+          <span onclick="addEmoji('🤔')">🤔</span>
+          <span onclick="addEmoji('😎')">😎</span>
+          <span onclick="addEmoji('😅')">😅</span>
+          <span onclick="addEmoji('🙃')">🙃</span>
+          <span onclick="addEmoji('😊')">😊</span>
+          <span onclick="addEmoji('😍')">😍</span>
+          <span onclick="addEmoji('🥰')">🥰</span>
+
+          <span onclick="addEmoji('❤️')">❤️</span>
+          <span onclick="addEmoji('🖤')">🖤</span>
+          <span onclick="addEmoji('💘')">💘</span>
+          <span onclick="addEmoji('✨')">✨</span>
+          <span onclick="addEmoji('🔥')">🔥</span>
+        </div>
+
+        <div style="opacity:0.75; font-size:0.82rem;">Emojis listos para pegar</div>
+      </div>
+
       <div class="row">
-        <button type="submit">Enviar 💌</button>
+        <button type="submit">Enviar</button>
       </div>
     </form>
 
     <div class="small-text">
-      *Tip: escribe normal. La app ya hace el “mood” con botones.
+      *Tip: la app de Madison solo ve <b>/app</b>. Tú usas este panel.
     </div>
   </div>
 
 <script>
+function addEmoji(emoji) {
+  const t = document.getElementById("respInput");
+  const start = t.selectionStart;
+  const end = t.selectionEnd;
+
+  const text = t.value;
+  t.value = text.substring(0, start) + emoji + text.substring(end);
+
+  t.focus();
+  t.selectionStart = t.selectionEnd = start + emoji.length;
+}
+
 function emojiFor(who){
-  if(who === "ella") return "💜";
+  if(who === "ella") return "🙂";
   if(who === "miguel") return "😎";
   return "💬";
 }
 
 function labelFor(who){
-  if(who === "ella") return "Ella 💜";
-  if(who === "miguel") return "Tú 😎";
+  if(who === "ella") return "Ella";
+  if(who === "miguel") return "Tú";
   return "Mensaje";
 }
 
@@ -195,7 +270,7 @@ function updatePanel() {
       if (hist.length === 0) {
         const info = document.createElement("div");
         info.className = "small-text";
-        info.textContent = "Aún no hay mensajes… 😅";
+        info.textContent = "Aún no hay mensajes…";
         chatBox.appendChild(info);
         return;
       }
