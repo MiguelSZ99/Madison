@@ -16,8 +16,8 @@ except Exception:
 
 DATA_2 = os.path.join(DATA_DIR, "data_app2.json")
 
-# Guardar SOLO 3 mensajes
-MAX_MENSAJES = 3
+# Guardar TODO (tipo WhatsApp)
+MAX_MENSAJES = None
 
 # ==========================
 #  TUS FRASES (NO TOCADAS)
@@ -59,7 +59,7 @@ EMOCIONES = {
 }
 
 # ==========================
-#  JSON helpers (más robustos)
+#  JSON helpers
 # ==========================
 def load_state():
     if not os.path.exists(DATA_2):
@@ -77,13 +77,13 @@ def load_state():
     return data
 
 def save_state(historial):
+    # ✅ Guardar TODO el historial
     with open(DATA_2, "w", encoding="utf-8") as f:
-        json.dump({"historial": historial[-MAX_MENSAJES:]}, f, ensure_ascii=False)
+        json.dump({"historial": historial}, f, ensure_ascii=False)
 
 # ==========================
 #  ROUTES
 # ==========================
-
 @app.route("/")
 def home():
     return redirect(url_for("app_view"))
@@ -132,8 +132,6 @@ def estado():
 @app.route("/favicon.ico")
 def favicon():
     return ("", 204)
-
-# ==========================
 
 if __name__ == "__main__":
     app.run(debug=True)
