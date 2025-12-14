@@ -6,50 +6,56 @@ from supabase import create_client, Client
 app = Flask(__name__)
 
 # ==========================
-#  SUPABASE CONFIG (Render)
+#  SUPABASE CONFIG
 # ==========================
-SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 if not SUPABASE_URL or not SUPABASE_KEY:
     raise RuntimeError("SUPABASE_URL o SUPABASE_KEY no están configuradas")
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-CHAT_ID = "madison"   # puedes cambiarlo si luego quieres más chats
+CHAT_ID = "madison"   # identificador del chat
+MAX_MENSAJES = 20     # tipo WhatsApp (últimos 20 visibles)
 
 # ==========================
-#  FRASES (sin tocar)
+#  FRASES
 # ==========================
 EMOCIONES = {
     "ternura": [
-        "Me caes bien. Eso ya es raro.",
-        "Tienes tema y eso me da más ganas de conocerte.",
-        "Me gusta tu vibra.",
-        "Pensé que ya no íbamos a volver a hablarnos, pero aquí estamos.",
-        "Me agrada cómo fluye la conversación contigo.",
+        "Cada que veo un mensaje tuyo me acuerdo del primero que te mande, como si no te conociera y todo empezara de cero.",
+        "Eres un mundo al que quiero conocer por cielo y tierra.",
+        "Me gustaria saber que se siente mirarte a los ojos, no se si me ponga nervioso",
+        "En cualquier momento nos podejos dejar de hablar pero yo se que te seguiras acordando de mi.",
+        "Yo se que somos mundos diferentes porque sabemos que ambos somos como agua y aceite pero quiero sentir esa adrenalina contigo."
     ],
     "risa": [
-        "Esto iba a ser una conversación normal y ya se desvió.",
-        "Me pregunto de qué color son tus calcetines.",
-        "Me pregunto qué cara pones al leer esto jaja.",
-        "¿Tienes una foto de niña?",
-        "Si te ríes, apenas va empezando.",
-        "No soy tu entretenimiento… pero sí tu mejor distracción.",
+        "Quieres jugar otro juego mas comprometido? se tienen que respetar las reglas",
+        "Subierias una montaña conmigo?",
+        "Seguro pusiste cara rara leyendo mis ocurrencias 😂",
+        "Grabate todo de mi porque no soy un video para que le des retroceder",
+        "No te coqueteo… solo me sale natural y si lo ves coqueteo avisame.",
+        "Saldrias de noche conmigo y no regresar hasta el dia siguiente cansada pero contenta?",
+        
     ],
     "picante": [
-        "Yo no provoco, pero tampoco me hago el santo 😌",
-        "Ya no sigas leyendo esto.",
-        "No sé si esto es coqueteo… pero no lo voy a detener.",
-        "Me gusta cómo va nuestra plática.",
-        "Si sigues leyendo es porque te interesa 😏",
+        "Que harias si te beso?",
+        "No pases una noche conmigo porque vas a querer otra y no siempre voy a estar disponible",
+        "Te dejarias hacer lo que yo te diga y obedecer cada palabra como niña buena?",
+        "No sigas viendo esto.",
+        "Que harias si beso tu cuello y luego tomo tu cintura y te jalo hacia mi ?",
+        "Que harias si cierro la puerta y jugamos a los nudos, pero tu vas primero, y ya no te puedes mover y comienzo a besarte lento?",
+        "Me dejerias poner mi mano en tu cuello y someterte mientras te digo cosas que nuca te han dicho en tu vida",
+        "No tengo prisa contigo pero el deseo se puede acumular y cuando se detone esto sera muy violento",
+
     ],
     "sorpresa": [
-        "No siempre respondo rápido… hoy sí.",
-        "Te estoy leyendo más de lo que crees.",
-        "Curioso que sigas aquí.",
-        "Me gusta tu actitud.",
-        "No digo todo. Me gusta dejar algo pendiente.",
+        "Irias por CDMX conmigo a 10 lados diferentes yo los escojo y tu escoges el ultimo",
+        "Tu y yo en la oscuridad y que solo nuestras manos sientan y vean lo que esta pasando",
+        "Quiero verte en persona pero eso es algo que se dara natural y sin presiones",
+        "Me dejarias entrar a tu mente?",
+        "Que todo esto sea un secreto, no le dire a nadie, los tesoros se guardan bien"
     ]
 }
 
@@ -65,14 +71,14 @@ def guardar_mensaje(de, texto):
 
 def obtener_historial():
     res = (
-        supabase
-        .table("mensajes")
+        supabase.table("mensajes")
         .select("de, texto, created_at")
         .eq("chat", CHAT_ID)
         .order("created_at", desc=False)
+        .limit(MAX_MENSAJES)
         .execute()
     )
-    return res.data or []
+    return res.data if res.data else []
 
 # ==========================
 #  ROUTES
@@ -86,15 +92,12 @@ def app_view():
     frase = None
 
     if request.method == "POST":
-
-        # Botones de emoción
         if "emocion" in request.form:
             emo = request.form["emocion"]
             if emo in EMOCIONES:
                 frase = random.choice(EMOCIONES[emo])
                 return redirect(url_for("app_view", f=frase))
 
-        # Mensaje de ella
         if "pregunta" in request.form:
             texto = request.form["pregunta"].strip()
             if texto:
