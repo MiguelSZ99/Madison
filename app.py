@@ -16,7 +16,7 @@ if not SUPABASE_URL or not SUPABASE_KEY:
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-CHAT_ID = "madison"   # identificador del chat
+CHAT_ID = "Lizbeth"   # identificador del chat
 MAX_MENSAJES = 20     # tipo WhatsApp (últimos 20 visibles)
 
 # ==========================

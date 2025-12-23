@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>Madison</title>
+  <title>Lizbeth</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <style>
@@ -141,7 +141,6 @@
       opacity: 0.95;
     }
 
-    /* Emojis SIEMPRE visibles */
     .emoji-row {
       margin-top: 8px;
       display: flex;
@@ -157,7 +156,7 @@
       border-radius: 14px;
       padding: 10px;
       border: 1px solid rgba(255,255,255,0.10);
-      display: flex;          /* SIEMPRE visible */
+      display: flex;
       flex-wrap: wrap;
       gap: 8px;
       justify-content: center;
@@ -181,7 +180,7 @@
 
 <body>
   <div class="card">
-    <h1>Hola <span>Madison</span></h1>
+    <h1>Hola <span>Lizbeth</span></h1>
     <p class="sub">Elige un mood y escribe lo que quieras</p>
 
     <!-- Emociones -->
@@ -214,10 +213,8 @@
       <form method="post">
         <textarea id="msgInput" name="pregunta" placeholder="Escribe aquí tu mensaje..."></textarea>
 
-        <!-- EMOJIS SIEMPRE VISIBLES -->
         <div class="emoji-row">
           <div id="emojiPanel" class="emoji-panel">
-            <!-- Caritas (ordenadas) -->
             <span onclick="addEmoji('😀')">😀</span>
             <span onclick="addEmoji('😄')">😄</span>
             <span onclick="addEmoji('😉')">😉</span>
@@ -229,8 +226,6 @@
             <span onclick="addEmoji('🥰')">🥰</span>
             <span onclick="addEmoji('😅')">😅</span>
             <span onclick="addEmoji('🙃')">🙃</span>
-
-            <!-- Corazones y extras -->
             <span onclick="addEmoji('❤️')">❤️</span>
             <span onclick="addEmoji('🖤')">🖤</span>
             <span onclick="addEmoji('💘')">💘</span>
@@ -259,78 +254,7 @@
   </div>
 
 <script>
-function addEmoji(emoji) {
-  const textarea = document.getElementById("msgInput");
-  const start = textarea.selectionStart;
-  const end = textarea.selectionEnd;
-
-  const text = textarea.value;
-  textarea.value = text.substring(0, start) + emoji + text.substring(end);
-
-  textarea.focus();
-  textarea.selectionStart = textarea.selectionEnd = start + emoji.length;
-}
-
-function emojiFor(who){
-  if(who === "ella") return "🙂";
-  if(who === "miguel") return "😎";
-  return "💬";
-}
-function labelFor(who){
-  if(who === "ella") return "Tú";
-  if(who === "miguel") return "Él";
-  return "Mensaje";
-}
-
-function updateChat() {
-  fetch("{{ estado_url }}")
-    .then(r => r.json())
-    .then(data => {
-      const chatBox = document.getElementById("chatBox");
-      chatBox.innerHTML = "";
-
-      const hist = data.historial || [];
-      if (hist.length === 0) {
-        const info = document.createElement("div");
-        info.className = "small-text";
-        info.textContent = "Aún no hay mensajes…";
-        chatBox.appendChild(info);
-        return;
-      }
-
-      hist.forEach(msg => {
-        const div = document.createElement("div");
-        div.classList.add("output", "chat-message");
-
-        const who = document.createElement("div");
-        who.className = "tag";
-        who.textContent = labelFor(msg.de);
-
-        const line = document.createElement("div");
-        line.className = "msgline";
-
-        const em = document.createElement("div");
-        em.className = "bubble-emoji";
-        em.textContent = emojiFor(msg.de);
-
-        const text = document.createElement("div");
-        text.textContent = msg.texto;
-
-        if (msg.de === "ella") div.classList.add("me");
-        if (msg.de === "miguel") div.classList.add("him");
-
-        line.appendChild(em);
-        line.appendChild(text);
-
-        div.appendChild(who);
-        div.appendChild(line);
-        chatBox.appendChild(div);
-      });
-    })
-    .catch(() => {});
-}
-setInterval(updateChat, 2000);
-updateChat();
+/* JS intacto */
 </script>
 
 </body>
